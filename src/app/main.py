@@ -11,12 +11,13 @@ def load_starcoder():
     # print(f'Loaded pipeline in {elapsed: .3f}s')
     return pipe
 
-pipeline_load_state = st.text('Loading pipeline...')
-start = time.perf_counter()
-pipe = load_starcoder()
-# time.sleep(1)
-elapsed = time.perf_counter()-start
-pipeline_load_state.text(f'Loading pipeline...done ({elapsed: .3f}s)')
+if st.checkbox('Load pipeline'):
+    pipeline_load_state = st.text('Loading pipeline...')
+    start = time.perf_counter()
+    pipe = load_starcoder()
+    # time.sleep(1)
+    elapsed = time.perf_counter()-start
+    pipeline_load_state.text(f'Loading pipeline...done ({elapsed: .3f}s)')
 
 prompt_template = "<|system|>\n<|end|>\n<|user|>\n{query}<|end|>\n<|assistant|>"
 # We use a special <|end|> token with ID 49155 to denote ends of a turn
