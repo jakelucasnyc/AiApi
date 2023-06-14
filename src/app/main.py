@@ -26,7 +26,7 @@ async def prompt(prompt: Prompt):
     inputs = app.tokenizer.encode(prompt_string, return_tensors='pt').to('cuda')
     _logger.info('Running inference...')
     start = time.perf_counter()
-    outputs = app.model.generate(prompt_string, do_sample=True, temperature=prompt.temp, top_k=50, top_p=0.95, eos_token_id=49155)
+    outputs = app.model.generate(inputs, do_sample=True, temperature=prompt.temp, top_k=50, top_p=0.95, eos_token_id=49155)
     elapsed = time.perf_counter()-start
     _logger.info(f'Ran inference ({elapsed: .3f}s)')
     return {'response': app.tokenizer.decode(outputs[0], clean_up_tokenization_spaces=False)}
