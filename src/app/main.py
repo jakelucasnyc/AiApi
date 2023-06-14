@@ -16,10 +16,10 @@ app.tokenizer = None
 app.model, app.tokenizer = load_starcoder()
 
 @app.post('/prompt/', status_code=200)
-async def prompt(prompt: Prompt):
+def prompt(prompt: Prompt):
     if app.model is None or app.tokenizer is None:
         raise HTTPException(status_code=503, detail='StarChat model and/or tokenizer not initialized')
-    if prompt.temp < 0 or prompt.temp > 1:
+    if prompt.temp <= 0 or prompt.temp > 1:
         raise HTTPException(status_code=400, detail=f'Temperature must be in this range: 0 <= temp >= 1, not {prompt.temp}')
 
     prompt_string = f"<|system|>\n{prompt.system}<|end|>\n<|user|>\n{prompt.user}<|end|>\n<|assistant|>"
@@ -30,7 +30,7 @@ async def prompt(prompt: Prompt):
     # print(len(inputs))
     _logger.info('Running inference...')
     start = time.perf_counter()
-    outputs = app.model.generate(inputs, max_new_tokens=512, do_sample=True, temperature=prompt.temp, top_k=50, top_p=0.95, eos_token_id=49155, pad_token_id=49155)
+    outputs = app.model.generate(inputs, max_new_tokens=500, do_sample=True, temperature=prompt.temp, top_k=50, top_p=0.95, eos_token_id=49155, pad_token_id=49155)
     elapsed = time.perf_counter()-start
     _logger.info(f'Ran inference ({elapsed: .3f}s)')
     return {'response': app.tokenizer.decode(outputs[0], clean_up_tokenization_spaces=False)}
