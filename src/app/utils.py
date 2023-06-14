@@ -23,7 +23,7 @@ def load_starcoder():
     )
     _logger.info('Loading model...')
     start = time.perf_counter()
-    model = AutoModelForCausalLM.from_pretrained(checkpoint, device_map='auto', quantization_config=config).to('cuda')
+    model = AutoModelForCausalLM.from_pretrained(checkpoint, device_map='auto', quantization_config=config)
     tokenizer = AutoTokenizer.from_pretrained(checkpoint, model_max_length=7500)
     elapsed = time.perf_counter() - start
     _logger.info(f'Loaded model ({elapsed: .3f}s)')

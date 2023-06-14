@@ -22,7 +22,7 @@ def prompt(prompt: Prompt):
         raise HTTPException(status_code=400, detail=f'Temperature must be in this range: 0 <= temp >= 1, not {prompt.temp}')
 
     prompt_string = f"<|system|>\n{prompt.system}<|end|>\n<|user|>\n{prompt.user}<|end|>\n<|assistant|>"
-    inputs = app.tokenizer.encode(prompt_string, return_tensors='pt').to('cuda')
+    inputs = app.tokenizer.encode(prompt_string, return_tensors='pt')
     if len(inputs[0]) > app.tokenizer.model_max_length:
         raise HTTPException(status_code=400, detail=f'Prompt must be under {app.tokenizer.model_max_length} tokens, not {len(inputs[0])}')
     # print(inputs)
