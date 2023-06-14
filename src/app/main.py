@@ -3,8 +3,8 @@ import time
 from transformers import pipeline, AutoModelForCausalLM, AutoTokenizer
 import torch
 from fastapi import FastAPI, HTTPException
-from app.utils import load_starcoder
-from app.models import Prompt
+from utils import load_starcoder
+from models import Prompt
 import logging
 
 _logger = logging.getLogger(__name__)
