@@ -24,7 +24,7 @@ def load_starcoder():
     # )
     _logger.info('Loading model...')
     start = time.perf_counter()
-    model = ORTModelForCausalLM.from_pretrained(checkpoint, from_transformers=True)
+    model = ORTModelForCausalLM.from_pretrained(checkpoint)
     # model.eval()
     tokenizer = AutoTokenizer.from_pretrained(checkpoint, model_max_length=7500)
     elapsed = time.perf_counter() - start
