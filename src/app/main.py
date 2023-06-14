@@ -24,7 +24,7 @@ async def prompt(prompt: Prompt):
     prompt_string = f"<|system|>\n{prompt.system}<|end|>\n<|user|>\n{prompt.user}<|end|>\n<|assistant|>"
     _logger.info('Running inference...')
     start = time.perf_counter()
-    outputs = app.pipe(prompt_string, do_sample=True, temperature=prompt.temp, top_k=50, top_p=0.95, eos_token_id=49155)
+    outputs = app.pipe(prompt_string, max_new_tokens=512, do_sample=True, temperature=prompt.temp, top_k=50, top_p=0.95, eos_token_id=49155)
     elapsed = time.perf_counter()-start
     _logger.info(f'Ran inference ({elapsed: .3f}s)')
     return {'response': outputs[0]['generated_text']}
