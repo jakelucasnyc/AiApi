@@ -1,6 +1,5 @@
 # import streamlit as st
 import time
-from transformers import pipeline, AutoModelForCausalLM, AutoTokenizer
 import torch
 from fastapi import FastAPI, HTTPException
 from utils import load_starcoder
