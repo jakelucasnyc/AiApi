@@ -24,8 +24,10 @@ async def prompt(prompt: Prompt):
 
     prompt_string = f"<|system|>\n{prompt.system}<|end|>\n<|user|>\n{prompt.user}<|end|>\n<|assistant|>"
     inputs = app.tokenizer.encode(prompt_string, return_tensors='pt').to('cuda')
-    print(inputs)
-    print(len(inputs))
+    if len(inputs[0]) > app.tokenizer.model_max_length:
+        raise HTTPException(status_code=400, detail=f'Prompt must be under {app.tokenizer.model_max_length} tokens, not {len(inputs[0])}')
+    # print(inputs)
+    # print(len(inputs))
     _logger.info('Running inference...')
     start = time.perf_counter()
     outputs = app.model.generate(inputs, max_new_tokens=512, do_sample=True, temperature=prompt.temp, top_k=50, top_p=0.95, eos_token_id=49155, pad_token_id=49155)
