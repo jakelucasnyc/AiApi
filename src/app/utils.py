@@ -24,7 +24,14 @@ def load_starcoder():
     _logger.info('Loading model...')
     start = time.perf_counter()
     model = AutoModelForCausalLM.from_pretrained(checkpoint, device_map='auto', quantization_config=config)
-    tokenizer = AutoTokenizer.from_pretrained(checkpoint, model_max_length=7500)
+    model.eval()
+    tokenizer = AutoTokenizer.from_pretrained(checkpoint, model_max_length=7500, device_map='auto')
     elapsed = time.perf_counter() - start
     _logger.info(f'Loaded model ({elapsed: .3f}s)')
+
+    _logger.info('Compiling model...')
+    start = time.perf_counter()
+    model = torch.compile(model)
+    elapsed = time.perf_counter() - start
+    _logger.info(f'Compiled model ({elapsed: .3f}s)')
     return model, tokenizer
