@@ -8,6 +8,7 @@ from models import Prompt
 import logging
 
 _logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 app = FastAPI()
 app.pipe = None
