@@ -18,7 +18,7 @@ app.pipe = load_starcoder()
 async def prompt(prompt: Prompt):
     if app.pipe is None:
         raise HTTPException(status_code=503, detail='StarChat pipeline not initialized')
-    if not (0 <= prompt.temp >= 1):
+    if prompt.temp < 0 or prompt.temp > 1:
         raise HTTPException(status_code=400, detail=f'Temperature must be in this range: 0 <= temp >= 1, not {prompt.temp}')
 
     prompt = f"<|system|>\n{prompt.system}<|end|>\n<|user|>\n{prompt.user}<|end|>\n<|assistant|>"
