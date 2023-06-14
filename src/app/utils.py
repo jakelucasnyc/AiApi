@@ -1,5 +1,5 @@
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
-from optimum.onnxruntime import ORTModelForCausalLM
+# from optimum.onnxruntime import ORTModelForCausalLM
 import logging
 _logger = logging.getLogger(__name__)
 import torch
@@ -24,9 +24,9 @@ def load_starcoder():
     # )
     _logger.info('Loading model...')
     start = time.perf_counter()
-    model = ORTModelForCausalLM.from_pretrained(checkpoint)
-    # model.eval()
-    tokenizer = AutoTokenizer.from_pretrained(checkpoint, model_max_length=7500)
+    model = AutoModelForCausalLM.from_pretrained(checkpoint, torch_dtype=torch.bfloat16, load_in_8bit=True, device_map='auto')
+    model.eval()
+    tokenizer = AutoTokenizer.from_pretrained(checkpoint, model_max_length=7500, device_map='auto')
     elapsed = time.perf_counter() - start
     _logger.info(f'Loaded model ({elapsed: .3f}s)')
 
