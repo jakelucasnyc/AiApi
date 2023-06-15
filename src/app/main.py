@@ -21,8 +21,12 @@ def prompt(prompt: Prompt):
     if prompt.temp <= 0 or prompt.temp > 1:
         raise HTTPException(status_code=400, detail=f'Temperature must be in this range: 0 <= temp >= 1, not {prompt.temp}')
 
-    prompt_string = f"<|system|>\n{prompt.system}<|end|>\n<|user|>\n{prompt.user}<|end|>\n<|assistant|>"
-    tokenized = app.tokenizer(prompt_string, return_tensors='pt')
+    prompt_strings = []
+    for user_prompt in prompt.user:
+        prompt_string = f"<|system|>\n{prompt.system}<|end|>\n<|user|>\n{user_prompt}<|end|>\n<|assistant|>"
+        prompt_strings.append(prompt_string)
+
+    tokenized = app.tokenizer(prompt_strings, return_tensors='pt')
     input_ids = tokenized.input_ids
     input_ids = input_ids.to(app.model.device)
 
@@ -46,7 +50,7 @@ def prompt(prompt: Prompt):
                                  )
     elapsed = time.perf_counter()-start
     _logger.info(f'Ran inference ({elapsed: .3f}s)')
-    return {'response': app.tokenizer.decode(outputs[0], clean_up_tokenization_spaces=False)}
+    return {f'r{i+1}': output for i, output in enumerate(app.tokenizer.batch_decode(outputs, clean_up_tokenization_spaces=False))}
 
 # # if st.checkbox('Load pipeline'):
 # pipeline_load_state = st.text('Loading pipeline...')
