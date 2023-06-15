@@ -38,7 +38,7 @@ def prompt(prompt: Prompt):
     #                           pad_token_id=49155, 
     #                           )
     # print(outputs.response)
-    tokenized = app.tokenizer(prompt_strings, return_tensors='pt')
+    tokenized = app.tokenizer(prompt_strings, return_tensors='pt', padding=True)
     input_ids = tokenized.input_ids
     input_ids = input_ids.to('cuda')
 
@@ -54,7 +54,7 @@ def prompt(prompt: Prompt):
     for out in tqdm(app.model.generate(input_ids=input_ids, 
                                 #  return_dict_in_generate=True,
                                  batch_size=8,
-                                 padding=True,
+                                #  padding=True,
                                  max_new_tokens=225, 
                                  min_new_tokens=150, 
                                  do_sample=True, 
