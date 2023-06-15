@@ -42,8 +42,9 @@ def prompt(prompt: Prompt):
     input_ids = tokenized.input_ids
     input_ids = input_ids.to('cuda')
 
-    if len(input_ids[0]) > app.tokenizer.model_max_length:
-        raise HTTPException(status_code=400, detail=f'Prompt must be under {app.tokenizer.model_max_length} tokens, not {len(input_ids[0])}')
+    for sample in input_ids:
+        if len(sample) > app.tokenizer.model_max_length:
+            raise HTTPException(status_code=400, detail=f'Prompt must be under {app.tokenizer.model_max_length} tokens, not {len(input_ids[0])}')
 
     # print(inputs)
     # print(len(inputs))
@@ -52,7 +53,7 @@ def prompt(prompt: Prompt):
     outputs = []
     for out in tqdm(app.model.generate(input_ids=input_ids, 
                                 #  return_dict_in_generate=True,
-                                 batch_size=8,
+                                #  batch_size=8,
                                  padding=True,
                                  max_new_tokens=225, 
                                  min_new_tokens=150, 
