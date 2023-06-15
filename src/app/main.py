@@ -22,14 +22,28 @@ def prompt(prompt: Prompt):
         raise HTTPException(status_code=400, detail=f'Temperature must be in this range: 0 <= temp >= 1, not {prompt.temp}')
 
     prompt_string = f"<|system|>\n{prompt.system}<|end|>\n<|user|>\n{prompt.user}<|end|>\n<|assistant|>"
-    inputs = app.tokenizer.encode(prompt_string, return_tensors='pt').to(app.model.device)
-    if len(inputs[0]) > app.tokenizer.model_max_length:
-        raise HTTPException(status_code=400, detail=f'Prompt must be under {app.tokenizer.model_max_length} tokens, not {len(inputs[0])}')
+    tokenized = app.tokenizer(prompt_string, return_tensors='pt')
+    input_ids = tokenized.input_ids
+    input_ids = input_ids.to(app.model.device)
+
+    if len(input_ids[0]) > app.tokenizer.model_max_length:
+        raise HTTPException(status_code=400, detail=f'Prompt must be under {app.tokenizer.model_max_length} tokens, not {len(input_ids[0])}')
+
     # print(inputs)
     # print(len(inputs))
     _logger.info('Running inference...')
     start = time.perf_counter()
-    outputs = app.model.generate(inputs, max_new_tokens=500, do_sample=True, temperature=prompt.temp, top_k=50, top_p=0.95, eos_token_id=49155, pad_token_id=49155)
+    outputs = app.model.generate(input_ids=input_ids, 
+                                 return_dict_in_generate=True
+                                 max_new_tokens=500, 
+                                 do_sample=True, 
+                                 temperature=prompt.temp, 
+                                 top_k=50, 
+                                 top_p=0.95, 
+                                 eos_token_id=49155, 
+                                #  pad_token_id=49155,
+                                 attention_mask=tokenized.attention_mask,
+                                 )
     elapsed = time.perf_counter()-start
     _logger.info(f'Ran inference ({elapsed: .3f}s)')
     return {'response': app.tokenizer.decode(outputs[0], clean_up_tokenization_spaces=False)}
