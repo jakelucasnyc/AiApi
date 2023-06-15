@@ -57,7 +57,7 @@ def prompt(prompt: Prompt):
                                 #  return_dict_in_generate=True,
                                 #  batch_size=8,
                                 #  padding=True,
-                                 max_new_tokens=225, 
+                                 max_new_tokens=400, 
                                  min_new_tokens=150, 
                                  do_sample=True, 
                                  temperature=prompt.temp, 
