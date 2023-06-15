@@ -53,7 +53,7 @@ def prompt(prompt: Prompt):
     outputs = []
     for out in tqdm(app.model.generate(input_ids=input_ids, 
                                 #  return_dict_in_generate=True,
-                                #  batch_size=8,
+                                 batch_size=8,
                                  padding=True,
                                  max_new_tokens=225, 
                                  min_new_tokens=150, 
@@ -62,7 +62,7 @@ def prompt(prompt: Prompt):
                                  top_k=50, 
                                  top_p=0.95, 
                                  eos_token_id=49155, 
-                                #  pad_token_id=49155, 
+                                 pad_token_id=49155, 
                                  attention_mask=tokenized.attention_mask,
                                  ),
                                  total=len(input_ids)

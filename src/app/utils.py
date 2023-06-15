@@ -42,7 +42,7 @@ def load_starcoder():
     #                                  enable_cuda_graph=True,
     #                                  )
     tokenizer = AutoTokenizer.from_pretrained(checkpoint, model_max_length=7500, device_map='auto')
-    tokenizer.pad_token = '<|pad|>'
+    tokenizer.pad_token = '<|end|>'
     elapsed = time.perf_counter() - start
     _logger.info(f'Loaded model ({elapsed: .3f}s)')
 
