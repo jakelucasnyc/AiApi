@@ -51,7 +51,7 @@ def prompt(prompt: Prompt):
     outputs = app.model.generate(input_ids=input_ids, 
                                 #  return_dict_in_generate=True,
                                  max_new_tokens=500, 
-                                 min_new_tokens=200, 
+                                 min_new_tokens=100, 
                                  do_sample=True, 
                                  temperature=prompt.temp, 
                                  top_k=50, 
