@@ -53,7 +53,7 @@ def prompt(prompt: Prompt):
     _logger.info('Running inference...')
     start = time.perf_counter()
     outputs = []
-    for out in tqdm(app.model.generate(input_ids=input_ids, 
+    for out in app.model.generate(input_ids=input_ids, 
                                 #  return_dict_in_generate=True,
                                 #  batch_size=8,
                                 #  padding=True,
@@ -66,8 +66,8 @@ def prompt(prompt: Prompt):
                                  eos_token_id=49155, 
                                  pad_token_id=49155, 
                                  attention_mask=tokenized.attention_mask,
-                                 ),
-                                 total=len(input_ids)
+                                #  ),
+                                #  total=len(input_ids)
     ):
         outputs.append(out)
 
@@ -85,7 +85,7 @@ def prompt(prompt: Prompt):
         assistant_match = re.search(r'\<\|assistant\|\>.+\<\|end\|\>', output, flags=re.DOTALL) 
         if assistant_match is None:
             _logger.warning('No match for response. Skipping...')
-            pprint(output)
+            print(output)
             continue
         response = assistant_match[0]
         parsed_outputs.append({'prompt': user_prompt, 'response': response})
