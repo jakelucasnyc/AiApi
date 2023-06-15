@@ -80,12 +80,12 @@ def prompt(prompt: Prompt):
         if user_match is None:
             _logger.warning('No match for user prompt. Skipping...')
             continue
-        user_prompt = user_match.match
+        user_prompt = user_match[0]
         assistant_match = re.search(r'\<\|assistant\|\>.+\<\|end\|\>', output, flags=re.DOTALL) 
         if assistant_match is None:
             _logger.warning('No match for response. Skipping...')
             continue
-        response = assistant_match.match
+        response = assistant_match[0]
         parsed_outputs.append({'prompt': user_prompt, 'response': response})
 
     return parsed_outputs
