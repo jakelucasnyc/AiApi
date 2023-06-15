@@ -7,6 +7,7 @@ from models import Prompt
 import logging
 from tqdm.auto import tqdm
 import re
+from pprint import pprint
 # from mii_utils import generator
 
 _logger = logging.getLogger(__name__)
@@ -84,6 +85,7 @@ def prompt(prompt: Prompt):
         assistant_match = re.search(r'\<\|assistant\|\>.+\<\|end\|\>', output, flags=re.DOTALL) 
         if assistant_match is None:
             _logger.warning('No match for response. Skipping...')
+            pprint(output)
             continue
         response = assistant_match[0]
         parsed_outputs.append({'prompt': user_prompt, 'response': response})
