@@ -35,7 +35,7 @@ def load_starcoder():
     # model.eval()
     model = deepspeed.init_inference(model,
                                     #  mp_size=1,
-                                     dtype=torch.float16,
+                                     dtype=torch.bfloat16,
                                      replace_method='auto',
                                      replace_with_kernel_inject=True)
     tokenizer = AutoTokenizer.from_pretrained(checkpoint, model_max_length=7500, device_map='auto')

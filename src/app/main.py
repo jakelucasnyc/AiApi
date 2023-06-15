@@ -50,7 +50,7 @@ def prompt(prompt: Prompt):
     start = time.perf_counter()
     outputs = app.model.generate(input_ids=input_ids, 
                                 #  return_dict_in_generate=True,
-                                 max_new_tokens=500, 
+                                 max_new_tokens=300, 
                                  min_new_tokens=150, 
                                  do_sample=True, 
                                  temperature=prompt.temp, 
