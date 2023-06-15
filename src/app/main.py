@@ -34,7 +34,7 @@ def prompt(prompt: Prompt):
     _logger.info('Running inference...')
     start = time.perf_counter()
     outputs = app.model.generate(input_ids=input_ids, 
-                                 return_dict_in_generate=True,
+                                #  return_dict_in_generate=True,
                                  max_new_tokens=500, 
                                  do_sample=True, 
                                  temperature=prompt.temp, 
