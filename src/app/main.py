@@ -39,7 +39,7 @@ def prompt(prompt: Prompt):
     # print(outputs.response)
     tokenized = app.tokenizer(prompt_strings, return_tensors='pt')
     input_ids = tokenized.input_ids
-    input_ids = input_ids.to(app.model.device)
+    input_ids = input_ids.to('cuda')
 
     if len(input_ids[0]) > app.tokenizer.model_max_length:
         raise HTTPException(status_code=400, detail=f'Prompt must be under {app.tokenizer.model_max_length} tokens, not {len(input_ids[0])}')
