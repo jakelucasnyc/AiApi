@@ -26,7 +26,7 @@ def prompt(prompt: Prompt):
         prompt_string = f"<|system|>\n{prompt.system}<|end|>\n<|user|>\n{user_prompt}<|end|>\n<|assistant|>"
         prompt_strings.append(prompt_string)
 
-    tokenized = app.tokenizer(prompt_strings, return_tensors='pt')
+    tokenized = app.tokenizer(prompt_strings, return_tensors='pt', padding=True)
     input_ids = tokenized.input_ids
     input_ids = input_ids.to(app.model.device)
 
