@@ -41,7 +41,7 @@ def prompt(prompt: Prompt):
                                  top_k=50, 
                                  top_p=0.95, 
                                  eos_token_id=49155, 
-                                #  pad_token_id=49155,
+                                 pad_token_id=49155,
                                  attention_mask=tokenized.attention_mask,
                                  )
     elapsed = time.perf_counter()-start
