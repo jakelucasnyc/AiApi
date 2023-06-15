@@ -5,6 +5,7 @@ from fastapi import FastAPI, HTTPException
 from utils import load_starcoder
 from models import Prompt
 import logging
+from tqdm.auto import tqdm
 # from mii_utils import generator
 
 _logger = logging.getLogger(__name__)
@@ -48,8 +49,11 @@ def prompt(prompt: Prompt):
     # print(len(inputs))
     _logger.info('Running inference...')
     start = time.perf_counter()
-    outputs = app.model.generate(input_ids=input_ids, 
+    outputs = []
+    for out in tqdm(app.model.generate(input_ids=input_ids, 
                                 #  return_dict_in_generate=True,
+                                 batch_size=8,
+                                 padding=True,
                                  max_new_tokens=225, 
                                  min_new_tokens=150, 
                                  do_sample=True, 
@@ -59,8 +63,12 @@ def prompt(prompt: Prompt):
                                  eos_token_id=49155, 
                                  pad_token_id=49155, 
                                  attention_mask=tokenized.attention_mask,
-                                 )
+                                 ),
+                                 total=len(input_ids)
+    ):
+        outputs.append(out)
+
     elapsed = time.perf_counter()-start
     _logger.info(f'Ran inference ({elapsed: .3f}s)')
     # return {f'r{i+1}': output for i, output in enumerate(app.tokenizer.batch_decode(outputs, clean_up_tokenization_spaces=False))}
-    return {'response': app.tokenizer.decode(outputs[0], clean_up_tokenization_spaces=False)}
+    return {'response': app.tokenizer.batch_decode(outputs, clean_up_tokenization_spaces=False)}
