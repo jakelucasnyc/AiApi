@@ -27,7 +27,7 @@ def load_starcoder():
     start = time.perf_counter()
     model = AutoModelForCausalLM.from_pretrained(checkpoint, 
                                                  device_map='auto', 
-                                                 torch_dtype=torch.bfloat16
+                                                #  torch_dtype=torch.bfloat16,
                                                  quantization_config=config, 
 
                                                  local_files_only=True
