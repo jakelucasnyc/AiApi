@@ -75,19 +75,20 @@ def prompt(prompt: Prompt):
     _logger.info(f'Ran inference ({elapsed: .3f}s)')
     # return {f'r{i+1}': output for i, output in enumerate(app.tokenizer.batch_decode(outputs, clean_up_tokenization_spaces=False))}
     decoded_outputs = app.tokenizer.batch_decode(outputs, clean_up_tokenization_spaces=False)
-    parsed_outputs = []
+    parsed_outputs = {'valid': [], 'invalid': []}
     for output in decoded_outputs:
         user_match = re.search(r'\<\|user\|\>.+\<\|end\|\>\n\<\|assistant\|\>', output, flags=re.DOTALL) 
         if user_match is None:
-            _logger.warning('No match for user prompt. Skipping...')
+            _logger.warning('No match for user prompt. Skipping parsing...')
+            parsed_outputs['invalid'].append(output)
             continue
         user_prompt = user_match[0]
         assistant_match = re.search(r'\<\|assistant\|\>.+\<\|end\|\>', output, flags=re.DOTALL) 
         if assistant_match is None:
-            _logger.warning('No match for response. Skipping...')
-            print(output)
+            _logger.warning('No match for response. Skipping parsing...')
+            parsed_outputs['invalid'].append(output)
             continue
         response = assistant_match[0]
-        parsed_outputs.append({'prompt': user_prompt, 'response': response})
+        parsed_outputs['valid'].append({'prompt': user_prompt, 'response': response})
 
     return parsed_outputs
