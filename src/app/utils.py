@@ -31,6 +31,7 @@ def load_starcoder():
                                                  )
     model.eval()
     tokenizer = AutoTokenizer.from_pretrained(checkpoint, model_max_length=7500, device_map='auto', local_files_only=True)
+    tokenizer.pad_token = tokenizer.eos_token
     elapsed = time.perf_counter() - start
     _logger.info(f'Loaded model ({elapsed: .3f}s)')
 
