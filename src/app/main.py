@@ -51,11 +51,13 @@ def prompt(prompt: Prompt):
     outputs = app.model.generate(input_ids=input_ids, 
                                 #  return_dict_in_generate=True,
                                  max_new_tokens=500, 
+                                 min_new_tokens=200, 
                                  do_sample=True, 
                                  temperature=prompt.temp, 
                                  top_k=50, 
                                  top_p=0.95, 
                                  eos_token_id=49155, 
+                                 pad_token_id=49155, 
                                  attention_mask=tokenized.attention_mask,
                                  )
     elapsed = time.perf_counter()-start
