@@ -53,7 +53,7 @@ def prompt(prompt: Prompt):
     outputs = []
     for out in tqdm(app.model.generate(input_ids=input_ids, 
                                 #  return_dict_in_generate=True,
-                                 batch_size=8,
+                                #  batch_size=8,
                                 #  padding=True,
                                  max_new_tokens=225, 
                                  min_new_tokens=150, 
