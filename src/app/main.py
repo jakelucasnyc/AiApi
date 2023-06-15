@@ -76,12 +76,12 @@ def prompt(prompt: Prompt):
     decoded_outputs = app.tokenizer.batch_decode(outputs, clean_up_tokenization_spaces=False)
     parsed_outputs = []
     for output in decoded_outputs:
-        user_match = re.search(r'\<\|user\|\>.+\<\|end\|\>', output) 
+        user_match = re.search(r'\<\|user\|\>.+\<\|end\|\>', output, flags=re.DOTALL) 
         if user_match is None:
             _logger.warning('No match for user prompt. Skipping...')
             continue
         user_prompt = user_match.match
-        assistant_match = re.search(r'\<\|assistant\|\>.+\<\|end\|\>', output) 
+        assistant_match = re.search(r'\<\|assistant\|\>.+\<\|end\|\>', output, flags=re.DOTALL) 
         if assistant_match is None:
             _logger.warning('No match for response. Skipping...')
             continue
