@@ -78,11 +78,13 @@ def prompt(prompt: Prompt):
     for output in decoded_outputs:
         user_match = re.search(r'\<\|user\|\>.+\<\|end\|\>', output) 
         if user_match is None:
-            raise RuntimeError('User match not found')
+            _logger.warning('No match for user prompt. Skipping...')
+            continue
         user_prompt = user_match.match
         assistant_match = re.search(r'\<\|assistant\|\>.+\<\|end\|\>', output) 
         if assistant_match is None:
-            raise RuntimeError('Assistant match not found')
+            _logger.warning('No match for response. Skipping...')
+            continue
         response = assistant_match.match
         parsed_outputs.append({'prompt': user_prompt, 'response': response})
 
