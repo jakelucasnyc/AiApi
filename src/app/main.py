@@ -6,6 +6,7 @@ from utils import load_starcoder
 from models import Prompt
 import logging
 from tqdm.auto import tqdm
+import re
 # from mii_utils import generator
 
 _logger = logging.getLogger(__name__)
@@ -72,4 +73,17 @@ def prompt(prompt: Prompt):
     elapsed = time.perf_counter()-start
     _logger.info(f'Ran inference ({elapsed: .3f}s)')
     # return {f'r{i+1}': output for i, output in enumerate(app.tokenizer.batch_decode(outputs, clean_up_tokenization_spaces=False))}
-    return {'response': app.tokenizer.batch_decode(outputs, clean_up_tokenization_spaces=False)}
+    decoded_outputs = app.tokenizer.batch_decode(outputs, clean_up_tokenization_spaces=False)
+    parsed_outputs = []
+    for output in decoded_outputs:
+        user_match = re.search(r'\<\|user\|\>.+\<\|end\|\>', output) 
+        if user_match is None:
+            raise RuntimeError('User match not found')
+        user_prompt = user_match.match
+        assistant_match = re.search(r'\<\|assistant\|\>.+\<\|end\|\>', output) 
+        if assistant_match is None:
+            raise RuntimeError('Assistant match not found')
+        response = assistant_match.match
+        parsed_outputs.append({'prompt': user_prompt, 'response': response})
+
+    return parsed_outputs
