@@ -17,8 +17,8 @@ app = FastAPI()
 
 @app.post('/prompt/', status_code=200)
 def prompt(prompt: Prompt):
-    if app.model is None or app.tokenizer is None:
-        raise HTTPException(status_code=503, detail='StarChat model and/or tokenizer not initialized')
+    # if app.model is None or app.tokenizer is None:
+    #     raise HTTPException(status_code=503, detail='StarChat model and/or tokenizer not initialized')
     if prompt.temp <= 0 or prompt.temp > 1:
         raise HTTPException(status_code=400, detail=f'Temperature must be in this range: 0 <= temp >= 1, not {prompt.temp}')
 
