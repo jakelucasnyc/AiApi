@@ -83,12 +83,16 @@ def prompt(prompt: Prompt):
             parsed_outputs['invalid'].append(output)
             continue
         user_prompt = user_match[0]
+        user_prompt.replace('<|user|>\n', '')
+        user_prompt.replace('<|end|>\n<|assistant|>', '')
         assistant_match = re.search(r'\<\|assistant\|\>.+\<\|end\|\>', output, flags=re.DOTALL) 
         if assistant_match is None:
             _logger.warning('No match for response. Skipping parsing...')
             parsed_outputs['invalid'].append(output)
             continue
         response = assistant_match[0]
+        response.replace('<|assistant|>\n', '')
+        response.replace('<|end|>', '')
         parsed_outputs['valid'].append({'prompt': user_prompt, 'response': response})
 
     return parsed_outputs
