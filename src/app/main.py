@@ -96,5 +96,6 @@ def prompt(prompt: Prompt):
         response = response.replace('<|assistant|>\n', '')
         response = response.replace('<|end|>', '')
         parsed_outputs['valid'].append({'prompt': user_prompt, 'response': response})
+        _logger.info(f'Response:\n{response}')
 
     return parsed_outputs
