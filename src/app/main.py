@@ -25,7 +25,7 @@ def prompt(prompt: Prompt):
     if prompt.temp <= 0 or prompt.temp > 1:
         raise HTTPException(status_code=400, detail=f'Temperature must be in this range: 0 <= temp >= 1, not {prompt.temp}')
 
-    _logger.info(f'Prompt:\n{prompt.user}')
+    _logger.info(f'Prompt:\n{prompt.user[0]}')
 
     prompt_strings = []
     for user_prompt in prompt.user:
