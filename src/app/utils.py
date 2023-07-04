@@ -76,6 +76,13 @@ def load_falcon():
                                                  trust_remote_code=True,
 
                                                  )
+    model = deepspeed.init_inference(model,
+                                    #  mp_size=1,
+                                     dtype=torch.bfloat16,
+                                    #  replace_method='auto',
+                                     replace_with_kernel_inject=True,
+                                     enable_cuda_graph=True,
+                                     )
     tokenizer = AutoTokenizer.from_pretrained(checkpoint, 
                                               model_max_length=7000, 
                                               device_map='auto',
