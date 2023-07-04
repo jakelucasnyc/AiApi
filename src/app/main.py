@@ -17,7 +17,7 @@ app = FastAPI()
 app.model = None
 app.tokenizer = None
 app.model_type = None
-app.model, app.tokenizer, app.model_type = load_falcon()
+app.model, app.tokenizer, app.model_type = load_starchat()
 
 @app.post('/starchat/', status_code=200)
 def starchat(prompt: Prompt):
