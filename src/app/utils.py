@@ -69,7 +69,7 @@ def load_falcon():
     _logger.info('Loading model...')
     start = time.perf_counter()
     model = AutoModelForCausalLM.from_pretrained(checkpoint, 
-                                                #  device_map='auto', 
+                                                 device_map='auto', 
                                                  torch_dtype=torch.bfloat16,
                                                 #  quantization_config=config, 
                                                  load_in_8bit=True,
