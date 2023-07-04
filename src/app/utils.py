@@ -81,6 +81,7 @@ def load_falcon():
                                               device_map='auto',
                                               padding_side='left'
                                               )
+    tokenizer.pad_token = tokenizer.eos_token
     elapsed = time.perf_counter() - start
     _logger.info(f'Loaded model ({elapsed: .3f}s)')
     return model, tokenizer, 'falcon'
